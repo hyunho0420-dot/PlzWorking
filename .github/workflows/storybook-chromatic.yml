@@ -1,9 +1,9 @@
-name: Storybook CI
+name: Storybook Chromatic Deploy
 
 on: push
 
 jobs:
-  chromatic-deployment:
+  chromatic:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,4 +16,6 @@ jobs:
       
       - run: npm ci
       
-      - run: npx chromatic --project-token=chpt_eac88168d4498a2 --force-rebuild
+      - uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
