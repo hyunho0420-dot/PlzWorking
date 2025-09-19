@@ -1,25 +1,18 @@
 name: Storybook CI
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
+on: push
 
 jobs:
-  chromatic:
+  chromatic-deployment:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          node-version: 'lts/*'
-          cache: 'npm'
-
-      - run: npm ci
-
+          fetch-depth: 0
+      
+      - name: Install dependencies
+        run: npm ci
+      
       - name: Publish to Chromatic
-        run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        run: npx chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} --force-rebuild
